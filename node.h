@@ -13,12 +13,16 @@ enum name{
     zero, one, two, three, four, five, six, seven, eight, nine, skip, reverse, drawtwo, wild, wild_draw_four
 };
 
+typedef struct card_t{
+    int color;
+    int name;
+}Card;
+
 typedef struct node_t{
     int color;
     int name;
     struct node_t *next;
     struct node_t *prev;
 }node;
-
 
 #endif 
