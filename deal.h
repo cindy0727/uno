@@ -84,7 +84,7 @@ void push(Card card){
     }
 }
 
-//發牌
+//發牌 範例:player2 = deal(player2);
 node *deal(node *list){
     if(list == NULL){
         list = (node *) malloc (sizeof(node));
