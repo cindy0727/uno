@@ -1,11 +1,6 @@
 #ifndef DEAL_H
 #define DEAL_H
 
-// #include<stdio.h>
-// #include<stdlib.h>
-// #include<time.h>
-// #include"node.h"
-
 #include"node.h"
 #include<time.h>
 #define STACKSIZE 108
