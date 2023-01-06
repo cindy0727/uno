@@ -17,7 +17,7 @@ node pop();
 
 
 //放入資料
-void push(node stack[STACKSIZE]){
+void push(node stack[]){
 	srand(time(NULL));
 	int i;
 	//分配紅黃綠藍牌
@@ -124,7 +124,10 @@ void push(node stack[STACKSIZE]){
 //發牌（1次1張）
 node deal(){
     if(Empty==0){
-        pop();   
+        node data;
+    	data=stack[top];
+    	top--;
+    	return data;  
     }
 }
 
@@ -138,12 +141,5 @@ int Empty(){
 	}
 }
 
-//拿出資料
-node pop(){
-	node data;
-    data=stack[top];
-    top--;
-    return data;
-}
 
 #endif
