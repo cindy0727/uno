@@ -1,114 +1,56 @@
-#include "function.h"
+#include<stdbool.h>
+#include<stdio.h>
+#include<stdlib.h>
 
-int main()
-{
-    int testdraw;
-    int i;
-    i = 0;
-    node *test;
-    node *testinput;
-    node *computer;
-    test = (node *)malloc(sizeof(node));
-    testinput = (node *)malloc(sizeof(node));
-    test->color = red;
-    test->name = seven;
-    test->next = NULL;
-    test->prev = NULL;
-    node *tmp;
-    node *tmp1;
-    node *tmp2;
-    node *tmpcom;
-    node *tmpcom1;
-    // tmp2 = test;
+#include "node.h"
 
-    while(i < 7)
-    {
-        if(i == 0)
-        {
-            computer = (node *)malloc(sizeof(node));
-            printf("enter the color and name:");
-            scanf("%d %d", &computer->color, &computer->name);
-            computer->prev = NULL;
-            computer->next = NULL;
-            i++;
-            tmpcom1 = computer;
-        }
-        if(i > 0)
-        {
-            node *tmpcom;
-            tmpcom = (node *)malloc(sizeof(node));
-            printf("enter the color and name:");
-            scanf("%d %d", &tmpcom->color, &tmpcom->name);
-            tmpcom->prev = tmpcom1;
-            tmpcom->next = NULL;
-            tmpcom1->next = tmpcom;
-            tmpcom1 = tmpcom;
-            i++;
-        }
-    }
+//getopt使用
+#include<ctype.h>
+#include<unistd.h>
+extern char *ptarg;
+extern int optind;
+extern int optopt;
+extern int opterr;
+extern int optreset;
+int getopt(int argc,char *const *argv,const char *optstring);
 
-    tmp = computer;
-    printf("computer:");
-    for(int j = 0; tmp != NULL; j++)
-    {
-        printf("%d %d ", tmp->color, tmp->name);
-        tmp1 = tmp;
-        tmp = tmp->next;
-    }
-    printf("\n");
+int ch;
+bool store = false;
+bool load = false;
 
-    test = (node *)malloc(sizeof(node));
-    test->color = red;
-    test->name = one;
-    test->prev = NULL;
-    test->next = NULL;
+FILE *fptr;
+//開新局為0,載入歷史紀錄為1  
+int NeworOld;
 
-    tmp2 = test;
-    printf("牌池:%d %d %d\n", test->color, test->name, testdraw);
-    for(int i = 0; i < 5; i++)
-    {
-        printf("i = %d\n", i);
-        test = computeruser(test, &computer, &testdraw);
-        printf("pokerpile %d %d", test->color, test->name);
-        printf("\n");
-        printf("牌池:%d %d %d\n", test->color, test->name, testdraw);
-        tmp = computer;
-        for(int j = 0; tmp != NULL; j++)
-        {
-            printf("%d %d ", tmp->color, tmp->name);
-            tmp1 = tmp;
-            tmp = tmp->next;
-        }
-        printf("\n\n");
-    }
+int main(int argc,char *argv[]){
 
-    printf("最後牌池:");
-    for(int j = 0; tmp2!= NULL; j++)
-    {
-        printf("%d %d \n", tmp2->color, tmp2->name);
-        tmp2 = tmp2->next;
-    }
-    printf("\n");
+	//getopt
+	opterr=0;
+	while((ch=getopt(argc,argv,"ns:l:"))!=-1){
+		switch(ch){
+			case 'n':
+				//printf("-n被印出");
+				NeworOld=0;
+				break;
 
-
-   /*printf("\n");
-    tmp = computer;
-    for(int i = 0; i < 7; i++)
-    {
-        printf("%d %d \n", tmp->color, tmp->name);
-        tmp1 = tmp;
-        tmp = tmp->next;
-
-    }*/
-
-    /*for(int i = 0; i < 6; i++)
-    {
-        printf("%d %d \n", tmp1->color, tmp1->name);
-        tmp1 = tmp1->prev;
-    }*/
-
-
-
-
-    return 0;
+			case 's':
+				//printf("-s被印出 %s",optarg);
+				store = true;
+				if((fptr=fopen(optarg,"w"))==NULL){
+					printf("File can not be opened.\n");
+					return 0;
+				}
+				NeworOld=0;
+				break;
+			case 'l':
+				//printf("-l被印出 %s",optarg);
+				load = true;
+				if((fptr=fopen(optarg,"r"))==NULL){
+					printf("File can not be opened.\n");
+					return 0;
+				}
+				NeworOld =1;
+				break;
+		}
+	}
 }
