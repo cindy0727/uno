@@ -119,8 +119,17 @@ void push(node stack[]){
 	}
 	for(i=100;i<108;i++){
 		stack[i].name=black;
+		int j=(i-100)/4;
+		switch(j){
+			case 0:
+				stack[i].name=wild;
+				break;
+			case 1:
+				stack[i].name=wild_draw_four;
+				break;
+		}
 	}
-}
+}	
 //發牌（1次1張）
 node deal(){
     if(Empty==0){
