@@ -102,6 +102,7 @@ node pop(){
 
 node deal(){
     node card;
+    //如果無牌可抽，將已出的牌回收，重新放到stack
     if(empty() == 1){
         reshuffledeck();
     }
@@ -110,13 +111,11 @@ node deal(){
 }
 
 void reshuffledeck(){
-    printf("hhhhh\n");
     while(UsedCard != NULL){
         if((UsedCard == NULL) || (UsedCard->next == NULL)){
-            printf("nnnnnnnnnn\n");
+            
             break;
         }else{
-            printf("yyyyyyyyyy\n");
             node *nextptr;
             nextptr = UsedCard->next;
             UsedCard->next = nextptr->next;
