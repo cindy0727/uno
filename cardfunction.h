@@ -5,6 +5,7 @@
 #include"node.h"
 #include"stack.h"
 #include"setupplayer.h"
+#include"player.h"
 
 void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNumber, int playerAmount);
 void Reverse(int *player_order, int player_number);
@@ -44,29 +45,15 @@ void Reverse(int *player_order, int player_number){
 
 //+2
 void DrawTwo(node *player){
-    node *newnode;
-    node data;
     for(i = 0; i < 2; i++){
-        newnode = (node *) malloc (sizeof(node));
-        data = deal();
-        newnode->color = data.color;
-        newnode->name = data.name;
-        newnode->next = player->next;
-        player->next = newnode;
+        player = DrawOne(player);
     }
 }
 
 //+4
 void DrawFour(node *player){
-    node *newnode;
-    node data;
     for(i = 0; i < 4; i++){
-        newnode = (node *) malloc (sizeof(node));
-        data = deal();
-        newnode->color = data.color;
-        newnode->name = data.name;
-        newnode->next = player->next;
-        player->next = newnode;
+        player = DrawOne(player);
     }
 }
 

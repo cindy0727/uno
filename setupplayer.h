@@ -4,7 +4,6 @@
 #include"node.h"
 #include"stack.h"
 
-node *initialcomputeruser(node *list);
 node *makelist(node *list);
 
 void ShuffleOrder(int *player_order, size_t amount);
@@ -16,15 +15,8 @@ node *player2 = NULL;//電腦玩家手中的牌
 node *player3 = NULL;//電腦玩家手中的牌
 node *player4 = NULL;//電腦玩家手中的牌
 
-node *makelist(node *list){
-    if(list == NULL){
-        list = (node *) malloc (sizeof(node));
-        list->next = NULL;
-    }
-    return list;
-}
 
-node *initialcomputeruser(node *list){
+node *makelist(node *list){
     if(list == NULL){
         list = (node *) malloc (sizeof(node));
         list->next = list->prev = NULL;
