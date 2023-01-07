@@ -5,7 +5,6 @@
 #include "node.h"
 #include "mode.h"
 
-#define STACKSIZE 500
 //getopt使用
 #include<ctype.h>
 #include<unistd.h>
