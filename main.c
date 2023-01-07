@@ -24,13 +24,13 @@ FILE *fptr;
 int NeworOld;
 
 typedef struct record{
-	int x;//哪位玩家
+	int x;//哪位玩家(真人玩家固定1)
 	node *player1;//真人玩家的手牌
 	node *cardpool;//目前牌池裡的牌
-	char computerplay;//電腦玩家出牌
-	char realplay;//真人玩家出牌
-	char computerdraw;//電腦玩家抽牌
-	char realdraw;//真人玩家抽牌
+	Card *computerplay;//電腦玩家出牌
+	Card *realplay;//真人玩家出牌
+	Card *computerdraw;//電腦玩家抽牌
+	Card *realdraw;//真人玩家抽牌
 	struct record *prev;
 	struct record *next;
 }Record;
@@ -38,7 +38,7 @@ typedef struct record{
 Record *head = NULL;
 Record *current = NULL;
 //放入資料
-void push(int x,node *player1,node *cardpool,char computerplay,char realplay,char computerdraw,char realdraw);
+void push(int x,node *player1,node *cardpool,Card *computerplay,Card *realplay,Card *computerdraw,Card *realdraw);
 
 
 int main(int argc,char *argv[]){
@@ -86,38 +86,37 @@ int main(int argc,char *argv[]){
 		}
 	}
 	//store
-		if(store){
-			printf("遊戲開始\n");
-			fprintf(fptr,"%s\n",head->player1);
-			head = head->next;
-			while(head != NULL){
-				//此輪電腦出牌
-				if(head->realplay==NULL&&head->computerdraw==NULL&&head->realdraw==NULL){
-					fprintf(fptr,"%d %s %s %s\n",head->x,head->computerplay,head->cardpool,head->player1);
-					head = head->next;
-				}
-				//此輪電腦抽牌
-				else if(head->realplay==NULL&&head->computerplay==NULL&&head->realdraw==NULL){
-					fprintf(fptr,"%d %s %s %s\n",head->x,head->computerdraw,head->cardpool,head->player1);
-					head = head->next;
-				}
-				//此輪玩家出牌
-				else if(head->computerplay==NULL&&head->computerdraw==NULL&&head->realdraw==NULL){
-					fprintf(fptr,"%d %s %s %s\n",head->x,head->realplay,head->cardpool,head->player1);
-					head = head->next;
-				}
-				//此輪玩家抽牌
-				else if(head->realplay==NULL&&head->computerdraw==NULL&&head->computerplay==NULL){
-					fprintf(fptr,"%d %s %s %s\n",head->x,head->realdraw,head->cardpool,head->player1);
-					head = head->next;
-				}
+	if(store){
+		printf("遊戲開始\n");
+		fprintf(fptr,"%s\n",head->player1);
+		head = head->next;
+		while(head != NULL){
+			//此輪電腦出牌
+			if(head->realplay==NULL&&head->computerdraw==NULL&&head->realdraw==NULL){
+				fprintf(fptr,"%d %s %s %s\n",head->x,head->computerplay,head->cardpool,head->player1);
+				head = head->next;
+			}
+			//此輪電腦抽牌
+			else if(head->realplay==NULL&&head->computerplay==NULL&&head->realdraw==NULL){
+				fprintf(fptr,"%d %s %s %s\n",head->x,head->computerdraw,head->cardpool,head->player1);
+				head = head->next;
+			}
+			//此輪玩家出牌
+			else if(head->computerplay==NULL&&head->computerdraw==NULL&&head->realdraw==NULL){
+				fprintf(fptr,"%d %s %s %s\n",head->x,head->realplay,head->cardpool,head->player1);
+				head = head->next;
+			}
+			//此輪玩家抽牌
+			else if(head->realplay==NULL&&head->computerdraw==NULL&&head->computerplay==NULL){
+				fprintf(fptr,"%d %s %s %s\n",head->x,head->realdraw,head->cardpool,head->player1);
+				head = head->next;
 			}
 		}
-		//fprintf(fptr,"%c", SBL);
-		//load
-		if(load){
-
-		}
+	}
+	//fprintf(fptr,"%c", SBL);
+	//load
+	if(load){
+	}
 
 	fclose(fptr);
 	return 0;
@@ -125,7 +124,7 @@ int main(int argc,char *argv[]){
 
 
 //放入資料
-void push(int x,node *player1,node *cardpool,char computerplay,char realplay,char computerdraw,char realdraw){
+void push(int x,node *player1,node *cardpool,Card *computerplay,Card *realplay,Card *computerdraw,Card *realdraw){
 	Record *tmp = (Record*)malloc(sizeof(Record));
 	tmp->x = x;
 	tmp->player1 = player1;
