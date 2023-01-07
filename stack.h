@@ -111,6 +111,7 @@ node deal(){
 }
 
 void reshuffledeck(){
+    //將已出的牌留最上面那張其他free
     while(UsedCard != NULL){
         if((UsedCard == NULL) || (UsedCard->next == NULL)){
             
@@ -122,7 +123,7 @@ void reshuffledeck(){
             free(nextptr);
         }
     }
-    printf("abcdefg\n");
+    //重新設置stack、洗牌
     SetUpDeck();
     ShuffleDeck(stack, 108);
 }
