@@ -35,8 +35,11 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
         node *tmpinsert;
         tmpinsert = (*computerusercard);
         //呼叫抽一張牌的函式 drawcard = 
-        drawcard->color = red;
-        drawcard->name = five;
+        node tmpcard;
+        tmpcard = pop();
+        drawcard = (node *)malloc(sizeof(node));
+        drawcard->color = tmpcard.color;
+        drawcard->name = tmpcard.name;
 
         //找最後一張 並新增
         while(tmpinsert->next != NULL)
