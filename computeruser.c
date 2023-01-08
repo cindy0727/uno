@@ -12,6 +12,7 @@ int bluecount = 0;
 //呼叫computeruser的function 
 node *computeruser(node *pokerpile, node **computerusercard, int *draw)
 {
+    *draw = 0;
     switched = 0;//判斷是否有可出的牌
     play = NULL;
     node *tmp;
@@ -93,7 +94,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
 }
 
 int foolproof(node *list, node *card);
-int foolproof(node *list, node *card)
+int foolproof(node *list, node *card)//如果要傳node進來自己改就行
 {
     node *tmp;
     tmp = list;
@@ -111,7 +112,7 @@ int foolproof(node *list, node *card)
         tmp = tmp->next;
     }
 
-    return switched;
+    return switched;//有這張牌回傳1 沒有回傳0
 }
 
 
