@@ -89,6 +89,30 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
     return pokerpile;//回傳牌池的頭
 }
 
+int foolproof(node *list, node *card);
+int foolproof(node *list, node *card)
+{
+    node *tmp;
+    tmp = list;
+    switched = 0;
+
+    while(tmp != NULL)
+    {
+        if((switched == 0) && ((tmp->color == card->color) && (tmp->name == card->name)))
+        {
+            switched = 1;
+            break;
+        }
+
+        //countcolor(tmp->color);
+        tmp = tmp->next;
+    }
+
+    return switched;
+}
+
+
+
 /*void countcolor(int cardcolor)
 {
     switch(cardcolor)
