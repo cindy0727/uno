@@ -8,7 +8,7 @@
 #define this_card_is_reverse 6 //符合規則且出的牌為reverse
 
 //function 填參數舉例 cardpool = ruleandrenewpokerpile(cardpool, inputcard, &drawnumber);
-node *ruleandrenewpokerpile (node *pokerpile, node *card, int *draw, node *head);
+node *ruleandrenewpokerpile (node *pokerpile, node *card, int *draw, node *head)
 {
     *draw = 0;//預設都先是0
 

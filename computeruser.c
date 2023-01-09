@@ -50,7 +50,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
         }
         tmpinsert = insertafter(tmpinsert, makenode(drawcard));
         
-        printf("電腦玩家無牌可出，抽取一張牌\n");
+        //printf("電腦玩家無牌可出，抽取一張牌\n");
     }
     //有牌可以出的情況
     else
