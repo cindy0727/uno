@@ -8,14 +8,20 @@
 #include"function.h"
 #include"gamerule.h"
 #include"stack.h"
+#include"mode.h"
+#include"cardfunction.h"
 
 #define R(card) "\033[1;31m"#card"\033[m" //紅色的牌
 #define Y(card) "\033[1;33m"#card"\033[m" //黃色的牌
 #define G(card) "\033[1;32m"#card"\033[m" //綠色的牌
 #define B(card) "\033[1;34m"#card"\033[m" //藍色的牌
+#define b(card) "\033[1m"#card"\033[m" //黑色的牌
 
-int i;
-int drawNumber;
+int i, t;
+int PlayerNumber;//本局玩家數量
+int drawNumber;//加牌數量
+int exist = 0;//1:玩家手中有這張牌 0:沒有
+node *tmp;
 
 void PlayerInput();//真人玩家輸入
 node *InputToNode(char Color[], char Name[]);//將輸入轉成node
@@ -23,29 +29,38 @@ void PrintCard(node *tmp);//印出卡片
 void PlayerCurrentCard();//印出玩家現有的牌
 char InputColor[10];
 char InputName[10];
-char YorN[2];
+char YorN[2] = {};
 node *input = NULL;
 char *pass = "pass";
-node *DrawOne(node *player);//加一張牌
+
 node UserInput;
 node *deletecard(node *player, node card);
-//void ComputerDrawOne(node *player);//電腦玩家加一張牌(初始發牌時)
+
+int order = 0;//出排順序
+int three_player_order[3] = {0, 1, 2};//出排順序:0代表player1,以此類推
+int four_player_order[4] = {0, 1, 2, 3};//出排順序:0代表player1,以此類推
+
+int RevserseOrNot = 0;//1 : 執行迴轉;
 
 //真人玩家輸入
 void PlayerInput(){
     PlayerCurrentCard();
+
+    //printf("exist = %d\ncardpool = %p\nUsedcard = %p\nUsedcard.next = %p\nyorn[0] = %c\n\n", exist, cardpool, UsedCard, UsedCard->next, YorN[0]);
+
     printf("先輸入顏色再輸入牌 ex.黃 0\n");
     printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
     scanf("%s", InputColor);
-    printf("InputColor = %s\n", InputColor);
+    //printf("InputColor = %s\n", InputColor);
+
     if(strcmp(InputColor, pass) == 0){
-        DrawOne(player1);
+        player1 = DrawOne(player1);
         printf("您抽到:");
         PrintCard(player1->next);
         printf("\n");
     }else{
         scanf("%s", InputName);
-        printf("InputName = %s\n", InputName);
+        //printf("InputName = %s\n", InputName);
         input = InputToNode(InputColor, InputName);
         printf("您要出的是 ");
         printf("\033[1m%s%s\n\033[m", InputColor, InputName);
@@ -53,11 +68,29 @@ void PlayerInput(){
         UserInput.name = input->name;
         printf(" 這張牌嗎?[y/n]:");
         scanf("%s", YorN);
-        while (YorN[0] != 'y'){
-            printf("先輸入顏色再輸入牌\n");
-            printf("請輸入您想出的牌:(如無可出的牌請輸入pass)");
-            scanf("%s", InputColor);
+    }
+    //exist = foolproof(player1, input);
+    cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber, player1);
+    while(/*(exist == 0) || */(UsedCard == cardpool) || (YorN[0] != 'y')){
+        if(strcmp(InputColor, pass) == 0){
+            break;
+        }
+        //printf("exist = %d\ncardpool = %p\nUsedcard = %p\nUsedcard.next = %p\nyorn[0] = %c\n\n", exist, cardpool, UsedCard, UsedCard->next, YorN[0]);
+        if((UsedCard == cardpool)/*(exist == 0)*/){
+            printf("\033[1;33m輸入不正確!請重新輸入!\n\033[m");
+        }
+        printf("先輸入顏色再輸入牌 ex.黃 0\n");
+        printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
+        scanf("%s", InputColor);
+        //printf("InputColor = %s\n", InputColor);
+        if(strcmp(InputColor, pass) == 0){
+            player1 = DrawOne(player1);
+            printf("您抽到:");
+            PrintCard(player1->next);
+            printf("\n");
+        }else{
             scanf("%s", InputName);
+            //printf("InputName = %s\n", InputName);
             input = InputToNode(InputColor, InputName);
             printf("您要出的是 ");
             printf("\033[1m%s%s\n\033[m", InputColor, InputName);
@@ -66,19 +99,22 @@ void PlayerInput(){
             printf(" 這張牌嗎?[y/n]:");
             scanf("%s", YorN);
         }
-        cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber);
-        while (UsedCard == cardpool){
-            printf("\033[1;33m輸入不正確!請重新輸入!\n\033[m");
-            printf("請輸入您想出的牌:");
-            scanf("%s", InputColor);
-            scanf("%s", InputName);
-            input = InputToNode(InputColor, InputName);
-            cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber);
-        }
-        UsedCard = cardpool;
-        player1 = deletecard(player1, UserInput);
+        //exist = foolproof(player1, input);
+        cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber, player1);
+        
     }
-    
+    if(PlayerNumber == 3){
+        SpecialCardFunction(player1, drawNumber, three_player_order, &order, PlayerNumber, &RevserseOrNot);
+    }else{
+        SpecialCardFunction(player1, drawNumber, four_player_order, &order, PlayerNumber, &RevserseOrNot);
+    }
+
+
+
+    if(strcmp(InputColor, pass) != 0){
+        player1 = deletecard(player1, UserInput);
+        UsedCard = cardpool;
+    }
 }
 
 //將輸入轉成node
@@ -138,11 +174,23 @@ node *InputToNode(char Color[], char Name[]){
 void PrintCard(node *tmp){
     if(tmp != NULL){
         if(tmp->color == black){
-                if(tmp->name == wild){
-                    
-                }else if(tmp->name == wild_draw_four){
-                    printf("%s", "+4");
+            for(i = 0; i < 15; i++){
+                if(tmp->name == i){
+                    if(i == skip){
+                        printf("%s", b(禁止));
+                    }else if(i == reverse){
+                        printf("%s", b(迴轉));
+                    }else if(i == drawtwo){
+                        printf("%s", b(+2));
+                    }else if(i == wild){
+                        printf("%s", b(萬用));
+                    }else if(i == wild_draw_four){
+                        printf("%s", b(+4));
+                    }else{
+                        printf("\033[1;31m%d\033[m", i);
+                    }
                 }
+            }
         }else if(tmp->color == red){
             for(i = 0; i < 15; i++){
                 if(tmp->name == i){
@@ -162,7 +210,7 @@ void PrintCard(node *tmp){
                 }
             }
         }else if(tmp->color == yellow){
-            for(i = 0; i < 13; i++){
+            for(i = 0; i < 15; i++){
                 if(tmp->name == i){
                     if(i == skip){
                         printf("%s", Y(禁止));
@@ -180,7 +228,7 @@ void PrintCard(node *tmp){
                 }
             }
         }else if(tmp->color == green){
-            for(i = 0; i < 13; i++){
+            for(i = 0; i < 15; i++){
                 if(tmp->name == i){
                     if(i == skip){
                         printf("%s", G(禁止));
@@ -198,7 +246,7 @@ void PrintCard(node *tmp){
                 }
             }
         }else if(tmp->color == blue){
-            for(i = 0; i < 13; i++){
+            for(i = 0; i < 15; i++){
                 if(tmp->name == i){
                     if(i == skip){
                         printf("%s", B(禁止));
@@ -207,7 +255,7 @@ void PrintCard(node *tmp){
                     }else if(i == drawtwo){
                         printf("%s", B(+2));
                     }else if(i == wild){
-                        printf("%s", R(萬用));
+                        printf("%s", B(萬用));
                     }else if(i == wild_draw_four){
                         printf("%s", B(+4));
                     }else{
@@ -234,57 +282,21 @@ void PlayerCurrentCard(){
     printf("\n");
 }
 
-//加一張牌
-node *DrawOne(node *player){
-    node data;
-    if(player == NULL){
-        player = (node *) malloc (sizeof(node));
-        data = pop();
-        player->color = data.color;
-        player->name = data.name;
-        player->next = player->prev = NULL;
-    }else{
-        node *newnode;
-        newnode = (node *) malloc (sizeof(node));
-        data = pop();
-        newnode->color = data.color;
-        newnode->name = data.name;
-        newnode->next = player->next;
-        newnode->prev = player;
-        if(player->next != NULL){
-            player->next->prev = newnode;
-        }
-        player->next = newnode;        
-    }
-    return player;
-}
+
 
 node *deletecard(node *player, node card){
-    int j = 0;
     node *tmp;
     tmp = player;
-    printf("card: color = %d  name = %d\n", card.color, card.name);
+    //printf("card: color = %d  name = %d\n", card.color, card.name);
     if((tmp->color == card.color) && (tmp->name == card.name)){
-        printf("j = %d:", j);
-        printf("tmp: color = %d  name = %d\n", tmp->color, tmp->name);
-        printf("tmp:%p\n", tmp);
-        printf("tmp.next:%p\n", tmp->next);
         node *p = tmp;
         tmp = tmp->next;
         tmp->prev = NULL;
-        printf("tmp     :%p\n", tmp);
-        free(p);
-        printf("hihihi\n");
         return tmp;
     }else{
         while((tmp->color != card.color) || (tmp->name != card.name)){
-            printf("j = %d:", j);
-            printf("tmp: color = %d  name = %d\n", tmp->color, tmp->name);
             tmp = tmp->next;
-            j++;
         }
-        printf("j = %d:", j);
-        printf("tmp: color = %d  name = %d\n", tmp->color, tmp->name);
         if(tmp->next == NULL){
             tmp->prev->next = tmp->next;
         }else{

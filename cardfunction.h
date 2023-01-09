@@ -5,16 +5,20 @@
 #include"node.h"
 #include"stack.h"
 #include"setupplayer.h"
-#include"player.h"
+//#include"player.h"
 
-void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNumber, int playerAmount);
-void Reverse(int *player_order, int player_number);
+void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNumber, int playerAmount, int *rev);
+//void Reverse3(int *player_order, int player_number);
+node *DrawOne(node *player);//加一張牌
 void DrawTwo(int *playerOrder, int orderNumber, int playerAmount);
 void DrawFour(int *playerOrder, int orderNumber, int playerAmount);
 
 
+
+
 //執行功能牌功能  格式(以玩家2為): SpecialCardFunction(player2, draw, ); 其他3個參數我來填
-void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNumber, int playerAmount){
+void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNumber, int playerAmount, int *rev){
+    *rev = 0;//初始化
     //+2
     if(draw == 2){
         DrawTwo(PlayerOrder, *OrderNumber, playerAmount);
@@ -29,18 +33,35 @@ void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNum
     }
     //reverse
     else if(draw == 6){
-        Reverse(PlayerOrder, playerAmount);
+        *rev = 1;
     }
 }
 
-//迴轉: player_order[]:玩家出排順序陣列、player_number:玩家數量
-void Reverse(int *player_order, int player_number){
-    int tmp;
-    for(int low = 0, high = player_number - 1; low < high; low++, high--){
-        tmp = player_order[low];
-        player_order[low] = player_order[high];
-        player_order[high] = tmp;
+
+
+//加一張牌
+node *DrawOne(node *player){
+    node data;
+    if(player == NULL){
+        player = (node *) malloc (sizeof(node));
+        data = pop();
+        player->color = data.color;
+        player->name = data.name;
+        player->next = player->prev = NULL;
+    }else{
+        node *newnode;
+        newnode = (node *) malloc (sizeof(node));
+        data = pop();
+        newnode->color = data.color;
+        newnode->name = data.name;
+        newnode->next = player->next;
+        newnode->prev = player;
+        if(player->next != NULL){
+            player->next->prev = newnode;
+        }
+        player->next = newnode;        
     }
+    return player;
 }
 
 //+2

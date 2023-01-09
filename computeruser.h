@@ -1,3 +1,6 @@
+#ifndef COMPUTERUSER_H
+#define COMPUTERUSER_H
+
 #include "function.h"
 #include <time.h>
 #include"stack.h"
@@ -140,3 +143,6 @@ int foolproof(node *list, node *card)//防呆模式
     }
 }*/
 
+
+
+#endif
