@@ -8,7 +8,7 @@
 #define this_card_is_reverse 6 //符合規則且出的牌為reverse
 
 //function 填參數舉例 cardpool = ruleandrenewpokerpile(cardpool, inputcard, &drawnumber);
-node *ruleandrenewpokerpile (node *pokerpile, node *card, int *draw, node *head)
+node *ruleandrenewpokerpile (node *pokerpile, node *card, int *draw, node *head);
 {
     *draw = 0;//預設都先是0
 
@@ -18,7 +18,7 @@ node *ruleandrenewpokerpile (node *pokerpile, node *card, int *draw, node *head)
         *draw = 0;
         return pokerpile;
     }
-    
+
     else
     {
         //數字和顏色都不同且不為黑牌 不符合條件 draw =0
@@ -138,40 +138,40 @@ int changedraw(int cardname)
 //更改黑色 將黑色改成使用者輸入的顏色
 void changewildcolor(node *input)
 {
-    char wildcolor[7];
+    char wildcolor[10];
     while(1)
     {
         printf("請選擇要換的顏色:");
         scanf("%s", wildcolor);
-        if(wildcolor[2] == 'a')
+        if(strcmp(wildcolor,"黑"))
         {
             printf("牌的顏色不可為黑\n");
             continue;
         }
+        else if(strcmp(wildcolor,"紅"))
+        {
+            input->color = red;
+            break;
+        }
+        else if(strcmp(wildcolor,"藍"))
+        {
+            input->color = blue;
+            break;
+        }
+        else if(strcmp(wildcolor,"綠"))
+        {
+            input->color = green;
+            break;
+        }
+        else if(strcmp(wildcolor,"黃"))
+        {
+            input->color = yellow;
+            break;
+        }
         else
         {
-            switch(wildcolor[2])
-            {
-                case 'd':
-                    input->color = red;
-                    break;
-
-                case 'u':
-                    input->color = blue;
-                    break;
-                
-                case 'e':
-                    input->color = green;
-                    break;
-                
-                case 'l':
-                    input->color = yellow;
-                    break;
-
-                default:
-                    break;
-            }
-            break;
+            printf("沒這個顏色 請重新輸入");
+            continue;
         }
     }
 }
