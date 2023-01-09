@@ -1,4 +1,5 @@
 #include "function.h"
+#include "time.h"
 
 node *play;
 int switched = 0;
@@ -93,8 +94,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
     return pokerpile;//回傳牌池的頭
 }
 
-int foolproof(node *list, node *card);
-int foolproof(node *list, node *card)//如果要傳node進來自己改就行
+int foolproof(node *list, node *card)//防呆模式
 {
     node *tmp;
     tmp = list;
@@ -107,8 +107,6 @@ int foolproof(node *list, node *card)//如果要傳node進來自己改就行
             switched = 1;
             break;
         }
-
-        //countcolor(tmp->color);
         tmp = tmp->next;
     }
 
