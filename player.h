@@ -290,12 +290,12 @@ void PlayerCurrentCard(){
 node *deletecard(node *player, node card){
     node *tmp;
     tmp = player;
-    //printf("card: color = %d  name = %d\n", card.color, card.name);
+    //刪除第一個
     if((tmp->color == card.color) && (tmp->name == card.name)){
         if(tmp->next == NULL){
             player = NULL;
             free(tmp);
-            return player2;
+            return player;
         }else{
             node *p = tmp;
             tmp = tmp->next;
