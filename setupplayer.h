@@ -40,6 +40,4 @@ void ShuffleOrder(int *player_order, size_t amount){
     }
 }
 
-
-
 #endif

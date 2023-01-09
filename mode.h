@@ -45,7 +45,7 @@ void ThreePlayer(){
             printf("玩家3 ");
         }
     }
-    printf("\n您為玩家1\n");
+    printf("\n您為玩家1\n\n");
 
     SetUpDeck();
     ShuffleDeck(stack, 108);
@@ -56,15 +56,13 @@ void ThreePlayer(){
     UsedCard = DrawOne(UsedCard);
     printf("底牌是: ");
     PrintCard(UsedCard);
-    printf("\n");
+    printf("\n\n");
 
     //開局一人發七張牌
     SetupThreePlayerCard();
 
     while (WhoWin == -1){
         
-        printf("ReverseOrNot = %d    ", RevserseOrNot);
-        printf("order = %d\n", order);
         
         //真人玩家出牌
         if(three_player_order[order] == 0){
@@ -128,10 +126,12 @@ void ThreePlayer(){
             }
         }
         GameOver(3);
-        printf("上一位玩家出的牌 : ");
-        PrintCard(UsedCard);
-        printf("\n");
-        
+        if(WhoWin == -1){
+            printf("上一位玩家出的牌 : ");
+            PrintCard(UsedCard);
+            printf("\n");
+        }
+    
         if(RevserseOrNot % 2 == 0){
             order = (order == 2) ? 0 : (order + 1);
         }else{
@@ -172,7 +172,7 @@ void FourPlayer(){
             printf("玩家4 ");
         }
     }
-    printf("\n您為玩家1\n");
+    printf("\n\n您為玩家1\n");
 
     SetUpDeck();
     ShuffleDeck(stack, 108);
@@ -183,15 +183,12 @@ void FourPlayer(){
     UsedCard = DrawOne(UsedCard);
     printf("底牌是: ");
     PrintCard(UsedCard);
-    printf("\n");
+    printf("\n\n");
     
     //開局一人發七張牌
     SetupFourPlayerCard();
 
     while (WhoWin == -1){
-        
-        printf("ReverseOrNot = %d    ", RevserseOrNot);
-        printf("order = %d\n", order);
         
         //真人玩家出牌
         if(four_player_order[order] == 0){
@@ -279,9 +276,11 @@ void FourPlayer(){
             }
         }
         GameOver(4);
-        printf("上一位玩家出的牌 : ");
-        PrintCard(UsedCard);
-        printf("\n");
+        if(WhoWin == -1){
+            printf("上一位玩家出的牌 : ");
+            PrintCard(UsedCard);
+            printf("\n");
+        }
         
         if(RevserseOrNot % 2 == 0){
             order = (order == 3) ? 0 : (order + 1);

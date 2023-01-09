@@ -5,7 +5,6 @@
 #include<string.h>
 #include"node.h"
 #include"setupplayer.h"
-//#include"function.h"
 #include"gamerule.h"
 #include"stack.h"
 #include"mode.h"
@@ -40,20 +39,13 @@ int order = 0;//出排順序
 int three_player_order[3] = {0, 1, 2};//出排順序:0代表player1,以此類推
 int four_player_order[4] = {0, 1, 2, 3};//出排順序:0代表player1,以此類推
 
-//int RevserseOrNot = 0;//1 : 執行迴轉;
 
 //真人玩家輸入
 void PlayerInput(){
     PlayerCurrentCard();
-
-    //printf("exist = %d\ncardpool = %p\nUsedcard = %p\nUsedcard.next = %p\nyorn[0] = %c\n\n", exist, cardpool, UsedCard, UsedCard->next, YorN[0]);
-    printf("%s\n",R(先輸入顏色再輸入牌 ex.黃 0));
-    printf("%s",R(請輸入您想出的牌，如無可出的牌請輸入pass:));
-    // printf("先輸入顏色再輸入牌 ex.黃 0\n");
-    // printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
+    printf("先輸入顏色再輸入牌 ex.黃 0\n");
+    printf("請輸入您想出的牌，如無可出的牌請輸入pass:");
     scanf("%s", InputColor);
-    //printf("InputColor = %s\n", InputColor);
-
     if(strcmp(InputColor, pass) == 0){
         player1 = DrawOne(player1);
         printf("您抽到:");
@@ -61,7 +53,6 @@ void PlayerInput(){
         printf("\n");
     }else{
         scanf("%s", InputName);
-        //printf("InputName = %s\n", InputName);
         input = InputToNode(InputColor, InputName);
         printf("您要出的是 ");
         printf("\033[1m%s%s\n\033[m", InputColor, InputName);
@@ -69,23 +60,18 @@ void PlayerInput(){
         UserInput.name = input->name;
         printf(" 這張牌嗎?[y/n]:");
         scanf("%s", YorN);
+        cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber, player1);
     }
-    //exist = foolproof(player1, input);
-    cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber, player1);
-    while(/*(exist == 0) || */(UsedCard == cardpool) || (YorN[0] != 'y')){
+    while((UsedCard == cardpool) || (YorN[0] != 'y')){
         if(strcmp(InputColor, pass) == 0){
             break;
         }
-        //printf("exist = %d\ncardpool = %p\nUsedcard = %p\nUsedcard.next = %p\nyorn[0] = %c\n\n", exist, cardpool, UsedCard, UsedCard->next, YorN[0]);
-        if((UsedCard == cardpool)/*(exist == 0)*/){
+        if((UsedCard == cardpool)){
             printf("\033[1;33m輸入不正確!請重新輸入!\n\033[m");
         }
-        printf("%s\n",R(先輸入顏色再輸入牌 ex.黃 0));
-        printf("%s",R(請輸入您想出的牌，如無可出的牌請輸入pass:));
-        // printf("先輸入顏色再輸入牌 ex.黃 0\n");
-        // printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
+        printf("先輸入顏色再輸入牌 ex.黃 0\n");
+        printf("請輸入您想出的牌，如無可出的牌請輸入pass:");
         scanf("%s", InputColor);
-        //printf("InputColor = %s\n", InputColor);
         if(strcmp(InputColor, pass) == 0){
             player1 = DrawOne(player1);
             printf("您抽到:");
@@ -93,7 +79,6 @@ void PlayerInput(){
             printf("\n");
         }else{
             scanf("%s", InputName);
-            //printf("InputName = %s\n", InputName);
             input = InputToNode(InputColor, InputName);
             printf("您要出的是 ");
             printf("\033[1m%s%s\n\033[m", InputColor, InputName);
@@ -102,17 +87,9 @@ void PlayerInput(){
             printf(" 這張牌嗎?[y/n]:");
             scanf("%s", YorN);
         }
-        //exist = foolproof(player1, input);
         cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber, player1);
         
     }
-    // if(PlayerNumber == 3){
-    //     SpecialCardFunction(player1, drawNumber, three_player_order, &order, PlayerNumber, &RevserseOrNot);
-    // }else{
-    //     SpecialCardFunction(player1, drawNumber, four_player_order, &order, PlayerNumber, &RevserseOrNot);
-    // }
-
-
 
     if(strcmp(InputColor, pass) != 0){
         player1 = deletecard(player1, UserInput);

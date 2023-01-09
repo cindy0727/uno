@@ -64,10 +64,8 @@ void DrawTwo(int *playerOrder, int *orderNumber, int playerAmount){
     int next = *orderNumber;
     if(RevserseOrNot % 2 == 0){
         next = (next == playerAmount - 1) ? 0 : (next + 1);
-        printf("r = 0, next = %d, order[next] = %d\n", next, playerOrder[next]);
     }else{
         next = (next == 0) ? (playerAmount - 1) : (next - 1);
-        printf("r = 1, next = %d, order[next] = %d\n", next, playerOrder[next]);
     }
     if(playerOrder[next] == 0){
         for(i = 0; i < 2; i++){
@@ -93,10 +91,8 @@ void DrawFour(int *playerOrder, int *orderNumber, int playerAmount){
     int next = *orderNumber;
     if(RevserseOrNot % 2 == 0){
         next = (next == playerAmount - 1) ? 0 : (next + 1);
-        printf("r = 0, next = %d, order[next] = %d\n", next, playerOrder[next]);
     }else{
         next = (next == 0) ? (playerAmount - 1) : (next - 1);
-        printf("r = 1, next = %d, order[next] = %d\n", next, playerOrder[next]);
     }
     if(playerOrder[next] == 0){
         for(i = 0; i < 4; i++){

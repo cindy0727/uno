@@ -107,7 +107,7 @@ int changedraw(int cardname)
 //更改黑色 將黑色改成使用者輸入的顏色
 void changewildcolor(node *input)
 {
-    char wildcolor[10];
+    char wildcolor[20];
     while(1)
     {
         printf("請選擇要換的顏色:");
