@@ -5,20 +5,17 @@
 #include"node.h"
 #include"stack.h"
 #include"setupplayer.h"
-//#include"player.h"
 
-void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNumber, int playerAmount, int *rev);
-//void Reverse3(int *player_order, int player_number);
+void SpecialCardFunction(int draw, int *PlayerOrder, int *OrderNumber, int playerAmount);
 node *DrawOne(node *player);//加一張牌
 void DrawTwo(int *playerOrder, int orderNumber, int playerAmount);
 void DrawFour(int *playerOrder, int orderNumber, int playerAmount);
 
+int RevserseOrNot = 0;
 
 
-
-//執行功能牌功能  格式(以玩家2為): SpecialCardFunction(player2, draw, ); 其他3個參數我來填
-void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNumber, int playerAmount, int *rev){
-    *rev = 0;//初始化
+//執行功能牌功能  
+void SpecialCardFunction(int draw, int *PlayerOrder, int *OrderNumber, int playerAmount){
     //+2
     if(draw == 2){
         DrawTwo(PlayerOrder, *OrderNumber, playerAmount);
@@ -29,15 +26,13 @@ void SpecialCardFunction(node *player, int draw, int *PlayerOrder, int *OrderNum
     }
     //skip
     else if(draw == 5){
-        *OrderNumber = (*OrderNumber == playerAmount - 1) ? 0 : (*OrderNumber + 1); 
-    }
-    //reverse
-    else if(draw == 6){
-        *rev = 1;
+        if(RevserseOrNot % 2 == 0){
+            *OrderNumber = (*OrderNumber == playerAmount - 1) ? 0 : (*OrderNumber + 1);
+        }else{
+            *OrderNumber = (*OrderNumber == 0) ? playerAmount - 1 : (*OrderNumber - 1); 
+        }
     }
 }
-
-
 
 //加一張牌
 node *DrawOne(node *player){
@@ -66,75 +61,55 @@ node *DrawOne(node *player){
 
 //+2
 void DrawTwo(int *playerOrder, int orderNumber, int playerAmount){
-
-    if(playerAmount == 3){
-        if(playerOrder[orderNumber] == 0){
-            for(i = 0; i < 2; i++){
-                player2 = DrawOne(player2);
-            }
-        }else if(playerOrder[orderNumber] == 1){
-            for(i = 0; i < 2; i++){
-                player3 = DrawOne(player3);
-            }
-        }else if(playerOrder[orderNumber] == 2){
-            for(i = 0; i < 2; i++){
-                player1 = DrawOne(player1);
-            }
+    int next = orderNumber;
+    if(RevserseOrNot % 2 == 0){
+        next = (next == playerAmount - 1) ? 0 : (next + 1);
+    }else{
+        next = (next == 0) ? (playerAmount - 1) : (next - 1);
+    }
+    next = (playerAmount - 1) ? 0 : next + 1;
+    if(playerOrder[next] == 0){
+        for(i = 0; i < 2; i++){
+            player1 = DrawOne(player1);
         }
-    }else if(playerAmount == 4){
-        if(playerOrder[orderNumber] == 0){
-            for(i = 0; i < 2; i++){
-                player2 = DrawOne(player2);
-            }
-        }else if(playerOrder[orderNumber] == 1){
-            for(i = 0; i < 2; i++){
-                player3 = DrawOne(player3);
-            }
-        }else if(playerOrder[orderNumber] == 2){
-            for(i = 0; i < 2; i++){
-                player4 = DrawOne(player4);
-            }
-        }else if(playerOrder[orderNumber] == 3){
-            for(i = 0; i < 2; i++){
-                player1 = DrawOne(player1);
-            }
+    }else if(playerOrder[next] == 1){
+        for(i = 0; i < 2; i++){
+            player2 = DrawOne(player2);
+        }
+    }else if(playerOrder[next] == 2){
+        for(i = 0; i < 2; i++){
+            player3 = DrawOne(player3);
+        }
+    }else if(playerOrder[next] == 3){
+        for(i = 0; i < 2; i++){
+            player4 = DrawOne(player4);
         }
     }
 }
 
 //+4
 void DrawFour(int *playerOrder, int orderNumber, int playerAmount){
-    if(playerAmount == 3){
-        if(playerOrder[orderNumber] == 0){
-            for(i = 0; i < 4; i++){
-                player2 = DrawOne(player2);
-            }
-        }else if(playerOrder[orderNumber] == 1){
-            for(i = 0; i < 4; i++){
-                player3 = DrawOne(player3);
-            }
-        }else if(playerOrder[orderNumber] == 2){
-            for(i = 0; i < 4; i++){
-                player1 = DrawOne(player1);
-            }
+    int next = orderNumber;
+    if(RevserseOrNot % 2 == 0){
+        next = (next == playerAmount - 1) ? 0 : (next + 1);
+    }else{
+        next = (next == 0) ? (playerAmount - 1) : (next - 1);
+    }
+    if(playerOrder[next] == 0){
+        for(i = 0; i < 4; i++){
+            player1 = DrawOne(player1);
         }
-    }else if(playerAmount == 4){
-        if(playerOrder[orderNumber] == 0){
-            for(i = 0; i < 4; i++){
-                player2 = DrawOne(player2);
-            }
-        }else if(playerOrder[orderNumber] == 1){
-            for(i = 0; i < 4; i++){
-                player3 = DrawOne(player3);
-            }
-        }else if(playerOrder[orderNumber] == 2){
-            for(i = 0; i < 4; i++){
-                player4 = DrawOne(player4);
-            }
-        }else if(playerOrder[orderNumber] == 3){
-            for(i = 0; i < 4; i++){
-                player1 = DrawOne(player1);
-            }
+    }else if(playerOrder[next] == 1){
+        for(i = 0; i < 4; i++){
+            player2 = DrawOne(player2);
+        }
+    }else if(playerOrder[next] == 2){
+        for(i = 0; i < 4; i++){
+            player3 = DrawOne(player3);
+        }
+    }else if(playerOrder[next] == 3){
+        for(i = 0; i < 4; i++){
+            player4 = DrawOne(player4);
         }
     }
 }

@@ -5,7 +5,7 @@
 #include<string.h>
 #include"node.h"
 #include"setupplayer.h"
-#include"function.h"
+//#include"function.h"
 #include"gamerule.h"
 #include"stack.h"
 #include"mode.h"
@@ -40,16 +40,17 @@ int order = 0;//出排順序
 int three_player_order[3] = {0, 1, 2};//出排順序:0代表player1,以此類推
 int four_player_order[4] = {0, 1, 2, 3};//出排順序:0代表player1,以此類推
 
-int RevserseOrNot = 0;//1 : 執行迴轉;
+//int RevserseOrNot = 0;//1 : 執行迴轉;
 
 //真人玩家輸入
 void PlayerInput(){
     PlayerCurrentCard();
 
     //printf("exist = %d\ncardpool = %p\nUsedcard = %p\nUsedcard.next = %p\nyorn[0] = %c\n\n", exist, cardpool, UsedCard, UsedCard->next, YorN[0]);
-
-    printf("先輸入顏色再輸入牌 ex.黃 0\n");
-    printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
+    printf("%s\n",R(先輸入顏色再輸入牌 ex.黃 0));
+    printf("%s",R(請輸入您想出的牌，如無可出的牌請輸入pass:));
+    // printf("先輸入顏色再輸入牌 ex.黃 0\n");
+    // printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
     scanf("%s", InputColor);
     //printf("InputColor = %s\n", InputColor);
 
@@ -79,8 +80,10 @@ void PlayerInput(){
         if((UsedCard == cardpool)/*(exist == 0)*/){
             printf("\033[1;33m輸入不正確!請重新輸入!\n\033[m");
         }
-        printf("先輸入顏色再輸入牌 ex.黃 0\n");
-        printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
+        printf("%s\n",R(先輸入顏色再輸入牌 ex.黃 0));
+        printf("%s",R(請輸入您想出的牌，如無可出的牌請輸入pass:));
+        // printf("先輸入顏色再輸入牌 ex.黃 0\n");
+        // printf("請輸入您想出的牌(如無可出的牌請輸入pass):");
         scanf("%s", InputColor);
         //printf("InputColor = %s\n", InputColor);
         if(strcmp(InputColor, pass) == 0){
@@ -103,11 +106,11 @@ void PlayerInput(){
         cardpool = ruleandrenewpokerpile(UsedCard, input, &drawNumber, player1);
         
     }
-    if(PlayerNumber == 3){
-        SpecialCardFunction(player1, drawNumber, three_player_order, &order, PlayerNumber, &RevserseOrNot);
-    }else{
-        SpecialCardFunction(player1, drawNumber, four_player_order, &order, PlayerNumber, &RevserseOrNot);
-    }
+    // if(PlayerNumber == 3){
+    //     SpecialCardFunction(player1, drawNumber, three_player_order, &order, PlayerNumber, &RevserseOrNot);
+    // }else{
+    //     SpecialCardFunction(player1, drawNumber, four_player_order, &order, PlayerNumber, &RevserseOrNot);
+    // }
 
 
 
@@ -289,10 +292,18 @@ node *deletecard(node *player, node card){
     tmp = player;
     //printf("card: color = %d  name = %d\n", card.color, card.name);
     if((tmp->color == card.color) && (tmp->name == card.name)){
-        node *p = tmp;
-        tmp = tmp->next;
-        tmp->prev = NULL;
-        return tmp;
+        if(tmp->next == NULL){
+            player = NULL;
+            free(tmp);
+            return player2;
+        }else{
+            node *p = tmp;
+            tmp = tmp->next;
+            tmp->prev = NULL;
+            free(p);
+            return tmp;
+        }
+        
     }else{
         while((tmp->color != card.color) || (tmp->name != card.name)){
             tmp = tmp->next;

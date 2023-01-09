@@ -54,7 +54,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
         }
         tmpinsert = insertafter(tmpinsert, makenode(drawcard));
         
-        printf("電腦玩家無牌可出，抽取一張牌\n");
+        //printf("電腦玩家無牌可出，抽取一張牌\n");
     }
     //有牌可以出的情況
     else
@@ -76,9 +76,17 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
         //刪掉電腦玩家手上的卡牌
         if(play->prev == NULL)//代表刪掉第一張
         {
-            (*computerusercard) = play->next;
-            (*computerusercard)->prev = NULL;
-            free(play);
+            if(play->next == NULL)//刪掉的是最後一張
+            {
+                (*computerusercard) = NULL;
+                free(play);
+            }
+            else
+            {
+                (*computerusercard) = play->next;
+                (*computerusercard)->prev = NULL;
+                free(play);
+            }
         }
         else if(play->next == NULL)//刪掉最後一張牌
         {
