@@ -23,22 +23,18 @@ FILE *fptr;
 //開新局為0,載入歷史紀錄為1  
 int NeworOld;
 
-typedef struct record{
-	int x;//哪位玩家(真人玩家固定1)
-	node *player1;//真人玩家的手牌
-	node *cardpool;//目前牌池裡的牌
-	Card *computerplay;//電腦玩家出牌
-	Card *realplay;//真人玩家出牌
-	Card *computerdraw;//電腦玩家抽牌
-	Card *realdraw;//真人玩家抽牌
-	struct record *prev;
-	struct record *next;
-}Record;
+
+//store
+int players;
+extern node StartCard;
+extern int RealPlayer[14]; 
+
 //指標
-Record *head = NULL;
-Record *current = NULL;
+extern Record *head;
+extern Record *current;
+
 //放入資料
-void push(int x,node *player1,node *cardpool,Card *computerplay,Card *realplay,Card *computerdraw,Card *realdraw);
+//void push(int x,node *player1,node *cardpool,Card *computerplay,Card *realplay,Card *computerdraw,Card *realdraw);
 
 
 int main(int argc,char *argv[]){
@@ -74,78 +70,118 @@ int main(int argc,char *argv[]){
 	}
 	//開始新局
 	if(NeworOld==0){
-		int i;
 		printf("請選擇三人局或四人局\n");
 		printf("三人局請輸入3，四人局請輸入4\n");
-		scanf("%d",&i);
-		if(i==3){
+		
+		scanf("%d",&players);
+		
+		if(players==3){
 			ThreePlayer();
 		}
-		else if(i==4){
+		else if(players==4){
 			FourPlayer();
 		}
 	}
 	//store
+	//store number of pepoleV
+	//底牌V
+	//起始牌V
+	//玩家順序V
+	//IFpassV
+	//抽到/顏色+數字 V
+	//電腦->電腦->電腦 (裡面沒寫電腦怎麼跑的)
+	
 	if(store){
-		printf("遊戲開始\n");
-		fprintf(fptr,"%s\n",head->player1);
-		head = head->next;
-		while(head != NULL){
-			//此輪電腦出牌
-			if(head->realplay==NULL&&head->computerdraw==NULL&&head->realdraw==NULL){
-				fprintf(fptr,"%d %s %s %s\n",head->x,head->computerplay,head->cardpool,head->player1);
-				head = head->next;
-			}
-			//此輪電腦抽牌
-			else if(head->realplay==NULL&&head->computerplay==NULL&&head->realdraw==NULL){
-				fprintf(fptr,"%d %s %s %s\n",head->x,head->computerdraw,head->cardpool,head->player1);
-				head = head->next;
-			}
-			//此輪玩家出牌
-			else if(head->computerplay==NULL&&head->computerdraw==NULL&&head->realdraw==NULL){
-				fprintf(fptr,"%d %s %s %s\n",head->x,head->realplay,head->cardpool,head->player1);
-				head = head->next;
-			}
-			//此輪玩家抽牌
-			else if(head->realplay==NULL&&head->computerdraw==NULL&&head->computerplay==NULL){
-				fprintf(fptr,"%d %s %s %s\n",head->x,head->realdraw,head->cardpool,head->player1);
-				head = head->next;
-			}
+		printf("儲存中...\n");
+		fprintf(fptr,"%d\n", players);
+		fprintf(fptr,"%d %d\n", StartCard.color, StartCard.name);
+		//only store player
+		for(int i = 0; i < 7; ++i)
+			fprintf(fptr,"%d %d ", RealPlayer[i*2],RealPlayer[i*2+1]);
+		fprintf(fptr,"\n");
+		
+		while (head != NULL)
+		{
+			fprintf(fptr,"%d %d %d %d\n", head->order, head->IFpass, head->card->color, head->card->name);
+			printf("%d %d %d %d\n", head->order, head->IFpass, head->card->color, head->card->name);
+			head = head->next;
 		}
+		
 	}
-	//fprintf(fptr,"%c", SBL);
+
 	//load
 	if(load){
+		char data[2];
+		char color[2], name[2];
+		fseek(fptr, SEEK_SET, 0);
+		printf("載入紀錄\n");
+		fscanf(fptr,"%s\n", data);
+		if(atoi(data)== 3){
+			printf("三人局\n");
+		}
+		else if(data[0] == '4'){
+			printf("四人局\n");
+		}
+		fscanf(fptr,"%s %s\n",color, name);
+		node tmp;
+		tmp.color = atoi(color);
+		tmp.name = atoi(name);
+		printf("底牌是: ");
+		PrintCard(&tmp);
+		printf("\n");
+		node *current = NULL;
+		for(int i = 0; i < 7; ++i){
+			fscanf(fptr,"%s %s\n",color, name);
+			node *newnode;
+        	newnode = (node *) malloc (sizeof(node));
+        	newnode->color = atoi(color);
+        	newnode->name = atoi(name);
+			if(current == NULL) {
+				player1 = newnode;
+				current = newnode;
+        		newnode->next = newnode->prev = NULL;
+    		}else{
+        		current -> next = newnode;
+
+				newnode->prev = current;
+				newnode->next = NULL;
+		
+				current = newnode;
+   			}
+		}
+		PlayerCurrentCard();
+		char ifpass[2];
+		while(fscanf(fptr,"%s %s", data, ifpass) != EOF){
+			printf("現在是玩家 %s\n", data);
+			int flag = ifpass[0]; // '1' 
+			fscanf(fptr,"%s %s\n", color, name);
+			if(atoi(data) == 0 && flag == 49){
+				printf("pass :");
+				node *newnode;
+        		newnode = (node *) malloc (sizeof(node));
+        		newnode->color = atoi(color);
+        		newnode->name = atoi(name);
+				newnode->next = player1->next;
+        		newnode->prev = player1;
+				if(player1->next != NULL){
+            		player1->next->prev = newnode;
+       			}
+        		player1->next = newnode; 
+				PrintCard(newnode);   
+				printf("\n");
+			}
+			else{
+				printf("usedCard :");
+				tmp.color = atoi(color);
+				tmp.name = atoi(name);
+				PrintCard(&tmp);
+				printf("\n");
+				player1 = deletecard(player1, tmp);
+			}
+		PlayerCurrentCard();
+		}
 	}
 
 	fclose(fptr);
 	return 0;
-}
-
-
-//放入資料
-void push(int x,node *player1,node *cardpool,Card *computerplay,Card *realplay,Card *computerdraw,Card *realdraw){
-	Record *tmp = (Record*)malloc(sizeof(Record));
-	tmp->x = x;
-	tmp->player1 = player1;
-	tmp->cardpool = cardpool;
-	tmp->computerplay= computerplay;
-	tmp->realplay = realplay;
-	tmp->computerdraw = computerdraw;
-	tmp->realdraw= realdraw;
-
-
-	if(current == NULL){
-		current = tmp;
-		head = tmp;
-		tmp->prev = NULL;
-		tmp->next = NULL;
-
-	}
-	else{
-		current -> next = tmp;
-		tmp->prev = current;
-		tmp->next = NULL;	
-		current = tmp;
-	}
 }
