@@ -72,9 +72,17 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
         //刪掉電腦玩家手上的卡牌
         if(play->prev == NULL)//代表刪掉第一張
         {
-            (*computerusercard) = play->next;
-            (*computerusercard)->prev = NULL;
-            free(play);
+            if(play->next == NULL)//刪掉的是最後一張
+            {
+                (*computerusercard) = NULL;
+                free(play);
+            }
+            else
+            {
+                (*computerusercard) = play->next;
+                (*computerusercard)->prev = NULL;
+                free(play);
+            }
         }
         else if(play->next == NULL)//刪掉最後一張牌
         {
