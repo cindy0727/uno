@@ -89,7 +89,7 @@ int main(int argc,char *argv[]){
 	//玩家順序V
 	//IFpassV
 	//抽到/顏色+數字 V
-	//電腦->電腦->電腦 (裡面沒寫電腦怎麼跑的)
+	//電腦->電腦->電腦 
 	
 	if(store){
 		printf("儲存中...\n");
