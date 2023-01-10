@@ -5,6 +5,7 @@
 #include<string.h>
 #include"node.h"
 #include"setupplayer.h"
+#include"function.h"
 #include"gamerule.h"
 #include"stack.h"
 #include"mode.h"
@@ -41,15 +42,18 @@ int four_player_order[4] = {0, 1, 2, 3};//出排順序:0代表player1,以此類�
 
 
 //真人玩家輸入
-void PlayerInput(){
+void PlayerInput(int order){
+    int ifpass = 0;//store
     PlayerCurrentCard();
     printf("先輸入顏色再輸入牌 ex.黃 0\n");
     printf("請輸入您想出的牌，如無可出的牌請輸入pass:");
     scanf("%s", InputColor);
     if(strcmp(InputColor, pass) == 0){
+        ifpass = 1; //store
         player1 = DrawOne(player1);
         printf("您抽到:");
         PrintCard(player1->next);
+        StoreAct(order, player1->next, ifpass);//store
         printf("\n");
     }else{
         scanf("%s", InputName);
@@ -94,6 +98,7 @@ void PlayerInput(){
     if(strcmp(InputColor, pass) != 0){
         player1 = deletecard(player1, UserInput);
         UsedCard = cardpool;
+        StoreAct(order, UsedCard, ifpass);//store
     }
 }
 
