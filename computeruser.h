@@ -4,6 +4,7 @@
 #include "function.h"
 #include <time.h>
 #include"stack.h"
+#include "setupplayer.h"
 
 node *play;
 int switched = 0;
@@ -17,11 +18,24 @@ int bluecount = 0;
 //呼叫computeruser的function 
 node *computeruser(node *pokerpile, node **computerusercard, int *draw)
 {
+
+    int ifpass = 0;//新store
     *draw = 0;
     switched = 0;//判斷是否有可出的牌
     play = NULL;
     node *tmp;
     tmp = (*computerusercard);
+    //最新store
+    int actorder;
+    if(tmp==player2){
+        actorder=1;
+    }
+    else if(tmp==player3){
+        actorder=2;
+    }
+    else if(tmp==player4){
+        actorder=3;
+    }
     while(tmp != NULL)
     {
         if((switched == 0) && (((tmp->color == pokerpile->color) || (tmp->name == pokerpile->name)) ||(tmp->color == black)))
@@ -37,6 +51,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
     //無牌可出
     if(play == NULL)
     {
+        ifpass = 1; //store
         node *drawcard;
         node *tmpinsert;
         tmpinsert = (*computerusercard);
@@ -46,6 +61,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
         drawcard = (node *)malloc(sizeof(node));
         drawcard->color = tmpcard.color;
         drawcard->name = tmpcard.name;
+        StoreAct(actorder, drawcard, ifpass);//最新store
 
         //找最後一張 並新增
         while(tmpinsert->next != NULL)
@@ -64,11 +80,13 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
             //如果牌是黑色 換的顏色隨機一個非黑色的顏色的
             srand(time(NULL));
             play->color = ((rand() % 4) + 1);
+            StoreAct(actorder, play, ifpass);//最新store
             pokerpile = insertafter(pokerpile, makenode(play));
             *draw = changedraw(play->name);
         }
         else
         {
+            StoreAct(actorder, play, ifpass);//最新store
             pokerpile = insertafter(pokerpile, makenode(play));
             *draw = changedraw(play->name);
         }

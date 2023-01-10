@@ -33,8 +33,6 @@ extern int RealPlayer[14];
 extern Record *head;
 extern Record *current;
 
-//放入資料
-//void push(int x,node *player1,node *cardpool,Card *computerplay,Card *realplay,Card *computerdraw,Card *realdraw);
 
 
 int main(int argc,char *argv[]){
@@ -44,12 +42,10 @@ int main(int argc,char *argv[]){
 	while((ch=getopt(argc,argv,"ns:l:"))!=-1){
 		switch(ch){
 			case 'n':
-				//printf("-n被印出");
 				NeworOld=0;
 				break;
 
 			case 's':
-				//printf("-s被印出 %s",optarg);
 				store = true;
 				if((fptr=fopen(optarg,"w"))==NULL){
 					printf("File can not be opened.\n");
@@ -58,7 +54,6 @@ int main(int argc,char *argv[]){
 				NeworOld=0;
 				break;
 			case 'l':
-				//printf("-l被印出 %s",optarg);
 				load = true;
 				if((fptr=fopen(optarg,"r"))==NULL){
 					printf("File can not be opened.\n");
@@ -155,7 +150,51 @@ int main(int argc,char *argv[]){
 			printf("現在是玩家 %s\n", data);
 			int flag = ifpass[0]; // '1' 
 			fscanf(fptr,"%s %s\n", color, name);
-			if(atoi(data) == 0 && flag == 49){
+			if(flag == 49){
+				if(atoi(data) == 0){
+					printf("pass :");
+					node *newnode;
+        			newnode = (node *) malloc (sizeof(node));
+        			newnode->color = atoi(color);
+        			newnode->name = atoi(name);
+					newnode->next = player1->next;
+        			newnode->prev = player1;
+					if(player1->next != NULL){
+            			player1->next->prev = newnode;
+       				}
+        			player1->next = newnode; 
+					PrintCard(newnode);   
+					printf("\n");
+				} 
+				else if(atoi(data) == 1){
+					printf("玩家2抽了一張牌\n");
+					node *newnode;
+				}
+				else if(atoi(data) == 2){
+					printf("玩家3抽了一張牌\n");
+				}
+				else if(atoi(data) == 3){
+					printf("玩家4抽了一張牌\n");
+				}
+			}
+			else{
+				if(atoi(data) == 0){
+					printf("usedCard :");
+					tmp.color = atoi(color);
+					tmp.name = atoi(name);
+					PrintCard(&tmp);
+					printf("\n");
+					player1 = deletecard(player1, tmp);
+				}
+				else{
+					printf("usedCard :");
+					tmp.color = atoi(color);
+					tmp.name = atoi(name);
+					PrintCard(&tmp);
+					printf("\n");
+				}
+			}
+			/*if(atoi(data) == 0 && flag == 49){
 				printf("pass :");
 				node *newnode;
         		newnode = (node *) malloc (sizeof(node));
@@ -177,11 +216,10 @@ int main(int argc,char *argv[]){
 				PrintCard(&tmp);
 				printf("\n");
 				player1 = deletecard(player1, tmp);
-			}
+			}*/
 		PlayerCurrentCard();
 		}
 	}
-
 	fclose(fptr);
 	return 0;
 }
