@@ -134,7 +134,8 @@ int main(int argc,char *argv[]){
 			if(current == NULL) {
 				player1 = newnode;
 				current = newnode;
-        		newnode->next = newnode->prev = NULL;
+        		newnode->next = NULL;
+				newnode->prev = NULL;
     		}else{
         		current -> next = newnode;
 
@@ -151,34 +152,33 @@ int main(int argc,char *argv[]){
 			int flag = ifpass[0]; // '1' 
 			fscanf(fptr,"%s %s\n", color, name);
 			if(flag == 49){
-				if(atoi(data) == 0){
+				if(atoi(data) == 1){
 					printf("pass :");
-					node *newnode;
-        			newnode = (node *) malloc (sizeof(node));
-        			newnode->color = atoi(color);
-        			newnode->name = atoi(name);
-					newnode->next = player1->next;
-        			newnode->prev = player1;
+					node *brandnewnode;
+        			brandnewnode = (node *) malloc (sizeof(node));
+        			brandnewnode->color = atoi(color);
+        			brandnewnode->name = atoi(name);
+					brandnewnode->next = player1->next;
+        			brandnewnode->prev = player1;
 					if(player1->next != NULL){
-            			player1->next->prev = newnode;
+            			player1->next->prev = brandnewnode;
        				}
-        			player1->next = newnode; 
-					PrintCard(newnode);   
+        			player1->next = brandnewnode; 
+					PrintCard(brandnewnode);   
 					printf("\n");
 				} 
-				else if(atoi(data) == 1){
-					printf("玩家2抽了一張牌\n");
-					node *newnode;
-				}
 				else if(atoi(data) == 2){
-					printf("玩家3抽了一張牌\n");
+					printf("玩家2抽了一張牌\n");
 				}
 				else if(atoi(data) == 3){
+					printf("玩家3抽了一張牌\n");
+				}
+				else if(atoi(data) == 4){
 					printf("玩家4抽了一張牌\n");
 				}
 			}
 			else{
-				if(atoi(data) == 0){
+				if(atoi(data) == 1){
 					printf("usedCard :");
 					tmp.color = atoi(color);
 					tmp.name = atoi(name);
@@ -194,29 +194,6 @@ int main(int argc,char *argv[]){
 					printf("\n");
 				}
 			}
-			/*if(atoi(data) == 0 && flag == 49){
-				printf("pass :");
-				node *newnode;
-        		newnode = (node *) malloc (sizeof(node));
-        		newnode->color = atoi(color);
-        		newnode->name = atoi(name);
-				newnode->next = player1->next;
-        		newnode->prev = player1;
-				if(player1->next != NULL){
-            		player1->next->prev = newnode;
-       			}
-        		player1->next = newnode; 
-				PrintCard(newnode);   
-				printf("\n");
-			}
-			else{
-				printf("usedCard :");
-				tmp.color = atoi(color);
-				tmp.name = atoi(name);
-				PrintCard(&tmp);
-				printf("\n");
-				player1 = deletecard(player1, tmp);
-			}*/
 		PlayerCurrentCard();
 		}
 	}

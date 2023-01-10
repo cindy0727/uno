@@ -64,6 +64,7 @@ void StoreAct(int order, node *cur, int IFpass){
 
 //三人模式
 void ThreePlayer(){
+    int ifpass=0;
     PlayerNumber = 3;
     RevserseOrNot = 0;
     int player_amount = (int) sizeof(three_player_order) / sizeof(three_player_order[0]);
@@ -123,11 +124,14 @@ void ThreePlayer(){
             ComputerCurrentCard(player2);
             cardpool = computeruser(UsedCard, &player2, &drawNumber);
             if(cardpool == UsedCard){
+                ifpass=1;
                 printf("玩家2抽了一張牌\n");
+                StoreAct(2,cardpool, ifpass);//最新store
             }else{
                 printf("玩家2出了");
                 PrintCard(cardpool);
                 printf("\n");
+                StoreAct(2,cardpool, ifpass);//最新store
             }
             UsedCard = cardpool;
             SpecialCardFunction(drawNumber, three_player_order, &order, PlayerNumber);
@@ -147,11 +151,14 @@ void ThreePlayer(){
             ComputerCurrentCard(player3);
             cardpool = computeruser(UsedCard, &player3, &drawNumber);
             if(cardpool == UsedCard){
+                ifpass=1;
                 printf("玩家3抽了一張牌\n");
+                StoreAct(3,cardpool, ifpass);//最新store
             }else{
                 printf("玩家3出了");
                 PrintCard(cardpool);
                 printf("\n");
+                StoreAct(3,cardpool, ifpass);//最新store
             }
             UsedCard = cardpool;
             SpecialCardFunction(drawNumber, three_player_order, &order, PlayerNumber);
@@ -191,6 +198,7 @@ void ThreePlayer(){
 
 //四人模式
 void FourPlayer(){
+    int ifpass=0;
     PlayerNumber = 4;
     RevserseOrNot = 0;
     int player_amount = (int) sizeof(four_player_order) / sizeof(four_player_order[0]);
@@ -251,11 +259,14 @@ void FourPlayer(){
             ComputerCurrentCard(player2);
             cardpool = computeruser(UsedCard, &player2, &drawNumber);
             if(cardpool == UsedCard){
+                ifpass=1;
                 printf("玩家2抽了一張牌\n");
+                StoreAct(2,cardpool, ifpass);//最新store
             }else{
                 printf("玩家2出了");
                 PrintCard(cardpool);
                 printf("\n");
+                StoreAct(2,cardpool, ifpass);//最新store
             }
             UsedCard = cardpool;
             SpecialCardFunction(drawNumber, four_player_order, &order, PlayerNumber);
@@ -275,11 +286,14 @@ void FourPlayer(){
             ComputerCurrentCard(player3);
             cardpool = computeruser(UsedCard, &player3, &drawNumber);
             if(cardpool == UsedCard){
+                ifpass=1;
                 printf("玩家3抽了一張牌\n");
+                StoreAct(3,cardpool, ifpass);//最新store
             }else{
                 printf("玩家3出了");
                 PrintCard(cardpool);
                 printf("\n");
+                StoreAct(3,cardpool, ifpass);//最新store
             }
             UsedCard = cardpool;
             SpecialCardFunction(drawNumber, four_player_order, &order, PlayerNumber);
@@ -299,11 +313,14 @@ void FourPlayer(){
             ComputerCurrentCard(player4);
             cardpool = computeruser(UsedCard, &player4, &drawNumber);
             if(cardpool == UsedCard){
+                ifpass=1;
                 printf("玩家4抽了一張牌\n");
+                StoreAct(4,cardpool, ifpass);//最新store
             }else{
                 printf("玩家4出了");
                 PrintCard(cardpool);
                 printf("\n");
+                StoreAct(4,cardpool, ifpass);//最新store
             }
             UsedCard = cardpool;
             SpecialCardFunction(drawNumber, four_player_order, &order, PlayerNumber);
