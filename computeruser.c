@@ -76,12 +76,14 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
             {
                 (*computerusercard) = NULL;
                 free(play);
+                return pokerpile;
             }
             else
             {
                 (*computerusercard) = play->next;
                 (*computerusercard)->prev = NULL;
                 free(play);
+                return pokerpile;
             }
         }
         else if(play->next == NULL)//刪掉最後一張牌
@@ -90,6 +92,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
             playprev = play->prev;
             playprev->next = NULL;
             free(play);
+            return pokerpile;
         }
         else
         {
@@ -97,6 +100,7 @@ node *computeruser(node *pokerpile, node **computerusercard, int *draw)
             node *playprev;
             playprev = play->prev;
             play = deleteafter(playprev, play);
+            return pokerpile;
         }
     }
     return pokerpile;//回傳牌池的頭
